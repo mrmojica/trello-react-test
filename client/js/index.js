@@ -14,19 +14,30 @@ var Card = function(props){
 	);
 };
 
-var trello = ['france', 'usa', 'mexico', 'colombia']
+var trello = ['france', 'Usa', 'mexico', 'colombia']
+var cities = ['York', 'New York', 'Baltimore', 'Washington']
+var all = {trello, cities};
+
+// var List2 = function(props) {
+// 	var cards 
+// }
+
+
 
 var List = React.createClass({
 	render: function() {
-		var messages = [];
+ 		var messages = [];
 		for(var i = 0; i <= trello.length; i++) {
-				messages.push(<Card message={trello[i]} />);
-		};
+			messages.push(<Card message={trello[i]} />);	
+		};		
+
+
 		return (
 			<div className="list">
 			<div className="list-title" titleClass="orange">{this.props.title}</div>
 
  				{messages}
+ 			
 
 			</div>				
 		);
