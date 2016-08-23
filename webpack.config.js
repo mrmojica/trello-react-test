@@ -10,7 +10,6 @@ var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-
 var filename = [packageData.name, packageData.version, 'js'];
 var plugins = [];
 
@@ -36,23 +35,21 @@ module.exports = {
             presets: ['es2015', 'react']
           }
         },
-        {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-            },
+        // {
+        //         test: /\.css$/,
+        //         loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+        //     },
             // Optionally extract less files
             // or any other compile-to-css language
             {
                 test: /\.less$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
+                loader: ExtractTextPlugin.extract(["css","less"])
             }
       ]
     },
     plugins: [
     new LiveReloadPlugin(),
-    new ExtractTextPlugin("client/css/style.less", {
-            allChunks: true
-        })
+    new ExtractTextPlugin("client/css/style.less")
 
     ]
 };
