@@ -37,6 +37,12 @@ var List = function(props){
 };
 
 //STEP 2 : build the Board woth title and with lists
+=======
+var trello = ['france', 'Usa', 'mexico', 'colombia']
+var cities = ['York', 'New York', 'Baltimore', 'Washington']
+var states = ['Virginia', 'Florida', 'New York', 'Washington']
+
+
 
 var Board = function(props){
     var myLists = props.lists.map(function(val, index){
@@ -75,12 +81,54 @@ var data = [
         "listCards" : ["Mexico", "China", "USA"]
     }
 ];
+=======
+var List = React.createClass({
+	render: function() {
+ 		var messages = [];
+		for(var i = 0; i <= this.props.cards.length; i++) {
+			messages.push(<Card message={this.props.cards[i]} />);	
+		};		
+>>>>>>> a6316837fba18b5840647b805be5f444eabf6d0c
 
 
 
 
+<<<<<<< HEAD
 
 
 document.addEventListener('DOMContentLoaded', function() {
     ReactDOM.render(<Board title="Hello Board!" lists={data}/> , document.getElementById('app'));
 });
+=======
+			</div>				
+		);
+	}
+});
+// var title = ['Countries', 'Cities', 'States' ];
+var Board = React.createClass({
+	getInitialState: function() {
+		return {
+			titles:['Countries', 'Cities', 'States'],
+			lists:[trello, cities, states]
+		};
+	},
+	render: function() {
+		var list = [];
+		for(var i = 0; i < this.state.lists.length; i++) {
+			list.push(<List title={this.state.titles[i]} cards={this.state.lists[i]} />);
+		};
+		return (
+			<div className="board">
+	
+				{list}
+			
+			</div>
+		);
+	}
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    ReactDOM.render(<Board />, document.getElementById('app'));
+});
+>>>>>>> a6316837fba18b5840647b805be5f444eabf6d0c
