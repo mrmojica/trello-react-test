@@ -1,10 +1,9 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+
+
 var Card = function(props){
-    // Card.defaultProps = {
-    //      message : "This is a default message"
-    //  }
     return (
 
         <div className = "card">
@@ -14,73 +13,92 @@ var Card = function(props){
     );
 };
 
-var countries = ['france', 'Usa', 'mexico', 'colombia']
-var cities = ['York', 'New York', 'Baltimore', 'Washington']
-var states = ['Virginia', 'Florida', 'New York', 'Washington']
 
-var Form = function(props){
-    return(
-        <div className="form">
-        <form onSubmit={props.onSubmit}>
-            <input type="text" onChange={props.onInputChanged}/>
-            <button type="submit">click me</button>
-        </form>
-        </div>
 
-    );
-}
-
-var List = React.createClass({
-    onSubmit : function(e){
-        e.preventDefault();
+var ListContainer = React.createClass({
+    getInitialState: function() {
+        return {
+            title: this.props.title,
+            text: "",
+            cards: this.props.initialCards,
+            textValue: this.props.textValue
+        }
     },
-    onInputChanged : function(e){
+    onSubmit: function(e){
         e.preventDefault();
-        console.log(e.currentTarget.value);
+        console.log("button clicked");
+        console.log(this.state.text);
+        this.setState({
+            cards: this.state.cards.concat(this.state.text),
+            textValue: ''
+        });
+
+    },
+    inputChanged: function(e){
+        e.preventDefault();
+        this.setState({
+            text: e.currentTarget.value,
+
+        })
     },
 
     render: function() {
-        var messages = [];
-        for(var i = 0; i <= this.props.cards.length; i++) {
-            messages.push(<Card message={this.props.cards[i]} />);  
-        };      
-
-
-        return (
-            <div className="list">
-            <div className="list-title" titleClass="orange">{this.props.title}</div>
-
-                {messages}
-            
-                <Form onSubmit={this.onSubmit} onInputChanged={this.onInputChanged}/>
-            </div>              
+     return (
+        <List title={this.state.title} textValue={this.state.textValue} cards={this.state.cards} onSubmit={this.onSubmit} onInputChanged={this.inputChanged} />
         );
     }
 });
-// var title = ['Countries', 'Cities', 'States' ];
+
+var List = function(props) {
+        var messages = [];
+        for(var i = 0; i <= props.cards.length; i++) {
+            messages.push(<Card message={props.cards[i]} />);  
+        };      
+
+        return (
+            <div className="list">
+            <div className="list-title">{props.title}</div>
+
+                {messages}
+         
+            <form onSubmit={props.onSubmit}>
+                <input type="text" value={props.textValue}  placeholder="Add Something" onChange={props.onInputChanged} />
+                <button type="submit">click me</button>
+            </form>
+       
+            </div>              
+        );
+    }
+
+
 var Board = React.createClass({
-    getInitialState: function() {
-        return {
-            titles:['Countries', 'Cities', 'States'],
-            lists:[countries, cities, states]
-        };
-    },
+
     render: function() {
-        var list = [];
-        for(var i = 0; i < this.state.lists.length; i++) {
-            list.push(<List title={this.state.titles[i]} cards={this.state.lists[i]} />);
+        var lists = [];
+        for(var i = 0; i < this.props.seed.length; i++) {
+            lists.push(<ListContainer title={this.props.seed[i].title} initialCards={this.props.seed[i].cards} />);
         };
         return (
             <div className="board">
     
-                {list}
-            
+        {lists}            
             </div>
         );
     }
 });
 
+var mySeed = [
+    {
+        title: 'My Food',
+        cards: ['apples', 'banana']    
+    },
+    {
+        title: 'My Cars',
+        cards : ['BMW', 'toyota']
+    }
+]
+
 
 document.addEventListener('DOMContentLoaded', function() {
-    ReactDOM.render(<Board />, document.getElementById('app'));
+    ReactDOM.render(<Board seed={mySeed} />, document.getElementById('app'));
 });
