@@ -16,19 +16,18 @@ var Card = function(props){
 
 var trello = ['france', 'Usa', 'mexico', 'colombia']
 var cities = ['York', 'New York', 'Baltimore', 'Washington']
-var all = {trello, cities};
+var states = ['Virginia', 'Florida', 'New York', 'Washington']
+
 
 // var List2 = function(props) {
 // 	var cards 
 // }
 
-
-
 var List = React.createClass({
 	render: function() {
  		var messages = [];
-		for(var i = 0; i <= trello.length; i++) {
-			messages.push(<Card message={trello[i]} />);	
+		for(var i = 0; i <= this.props.cards.length; i++) {
+			messages.push(<Card message={this.props.cards[i]} />);	
 		};		
 
 
@@ -43,12 +42,18 @@ var List = React.createClass({
 		);
 	}
 });
-var title = ['Countries', 'Cities', 'States' ];
+// var title = ['Countries', 'Cities', 'States' ];
 var Board = React.createClass({
+	getInitialState: function() {
+		return {
+			titles:['Countries', 'Cities', 'States'],
+			lists:[trello, cities, states]
+		};
+	},
 	render: function() {
 		var list = [];
-		for(var i = 0; i < this.props.everything.length; i++) {
-			list.push(<List title={this.props.everything[i]} />);
+		for(var i = 0; i < this.state.lists.length; i++) {
+			list.push(<List title={this.state.titles[i]} cards={this.state.lists[i]} />);
 		};
 		return (
 			<div className="board">
@@ -62,5 +67,5 @@ var Board = React.createClass({
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    ReactDOM.render(<Board everything={title} />, document.getElementById('app'));
+    ReactDOM.render(<Board />, document.getElementById('app'));
 });
