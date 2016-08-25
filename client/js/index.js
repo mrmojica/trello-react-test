@@ -2,135 +2,102 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 
-var Card = function(props) {
-  return (
-      <li className="card">{props.text}</li>
-    )
+
+var Card = function(props){
+    return (
+
+        <div className = "card">
+            <div className="card-message">{props.message}</div>
+        </div>
+
+    );
 };
 
-var List = React.createClass({
+
+
+var ListContainer = React.createClass({
     getInitialState: function() {
-      return {
-        text: "",
-        listCards: []
-      }
+        return {
+            title: this.props.title,
+            text: "",
+            cards: this.props.initialCards
+        
+        }
+    },
+    onSubmit: function(e){
+        e.preventDefault();
+        console.log("button clicked");
+        console.log(this.state.text);
+        this.setState({
+            cards: this.state.cards.concat(this.state.text),
+            text: ""
+        });
+
+    },
+    inputChanged: function(e){
+        e.preventDefault();
+        this.setState({
+            text: e.currentTarget.value,
+
+        })
     },
 
-   onAddSubmit: function(event) {
-     event.preventDefault();
-     console.log('button pressed');
-     // var updatedList = this.state.cards.slice();
-     // updatedList.push(this.state.item);
-    this.setState({
-       text:"",
-       listCards: this.state.listCards.concat([this.state.text])
-      
-    })
-
-  },
-
-  onAddInputChanged: function(event) {
-   event.preventDefault();
-   // console.log(event.target.value);
-
-   this.setState({
-       text: event.target.value,
-     
-     });
-  },
-  render: function(props) {
-      var myCards = [];
-       for (var i = 0; i < this.state.listCards.length; i++) {
-           myCards.push(<Card text={this.state.listCards[i]} />);
-       }
-       return (
-          <div className="board-list">
-          {this.props.title}
-          <ul>{myCards}</ul>
-        <Form onAddSubmit={this.onAddSubmit} onAddInputChanged={this.onAddInputChanged} value={this.state.text}/>
- 
-         </div>  
- 
-     )
-     
-  }
+    render: function() {
+     return (
+        <List title={this.state.title}  textValue={this.state.text} cards={this.state.cards} onSubmit={this.onSubmit} onInputChanged={this.inputChanged} />
+        );
+    }
 });
 
-// var List = function(props) {
-//  return (
-//       <div className="board-list">{props.text}
-//        <form onSubmit={props.onAddSubmit}>
-//          <input type="text" placeholder="enter task" onChange={props.onAddInputChanged} value={props.value}/>
-//          <button type="submit">Submit</button>
-//        </form>  
-//      </div>    
-//        );
-// }
+var List = function(props) {
+        var messages = [];
+        for(var i = 0; i <= props.cards.length; i++) {
+            messages.push(<Card message={props.cards[i]} />);  
+        };      
 
-var Board = React.createClass({ // ListContainer
+        return (
+            <div className="list">
+            <div className="list-title">{props.title}</div>
 
-getInitialState: function() {
-       return {
-         title: '',
-         listItems:[]
-         }
-       },
+                {messages}
+         
+            <form onSubmit={props.onSubmit}>
+                <input type="text" value={props.textValue}  placeholder="Add Something" onChange={props.onInputChanged} />
+                <button type="submit">click me</button>
+            </form>
+       
+            </div>              
+        );
+    }
 
- onAddSubmit: function(event) {
-   event.preventDefault();
-   console.log('button pressed');
-   // var updatedList = this.state.cards.slice();
-   // updatedList.push(this.state.item);
-  this.setState({
-     title:'',
-     listItems: this.state.listItems.concat([this.state.title])
+
+var Board = React.createClass({
+
+    render: function() {
+        var lists = [];
+        for(var i = 0; i < this.props.seed.length; i++) {
+            lists.push(<ListContainer title={this.props.seed[i].title} initialCards={this.props.seed[i].cards} />);
+        };
+        return (
+            <div className="board">
     
-  })
-
-},
-
-onAddInputChanged: function(event) {
- event.preventDefault();
- // console.log(event.target.value);
-
- this.setState({
-     title: event.target.value,
-   
-   });
-},
- render: function(props) {
-   var myList = [];
-   for (var i = 0; i < this.state.listItems.length; i++) {
-       myList.push(<List title={this.state.listItems[i]} />);
-   }
-   console.log(myList);
-   return (
-
- <div className="container">
- <div>Some Content</div>
-  <Form onAddSubmit={this.onAddSubmit} onAddInputChanged={this.onAddInputChanged} value={this.state.title}/>
- <div className="list">
- <h1>{myList}</h1>
- </div>
- </div>
- )
-}
+        {lists}            
+            </div>
+        );
+    }
 });
-
-var Form = function(props) {
- return(
-   <form onSubmit={props.onAddSubmit}>
-     <input type="text" placeholder="enter task" onChange={props.onAddInputChanged} value={props.value}/>
-     <button type="submit">Submit</button>
-   </form>
-
-   )
-};
-
-
-
+var mySeed = [
+    {
+        title: 'My Food',
+        cards: ['apples', 'banana']    
+    },
+    {
+        title: 'My Cars',
+        cards : ['BMW', 'toyota']
+    }
+]
 
 
 document.addEventListener('DOMContentLoaded', function() {
-   ReactDOM.render(<Board />, document.getElementById('app'));
+    ReactDOM.render(<Board seed={mySeed} />, document.getElementById('app'));
 });
